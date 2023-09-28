@@ -1,10 +1,9 @@
 const User = require("../models/User");
 
 const register = async (req, res, next) => {
-  const { firstName, lastName, email, password, role } = req.body;
+  const { task, teamId } = req.body;
 
-  if (firstName && lastName && email && password) {
-    const hashedPassword = bcrypt.hashSync(password, 10);
+  if (task && teamId) {
 
     const user = await User.create({
       firstName,

@@ -16,6 +16,8 @@ app.use(cors(corsOptions))
 
 
 app.use("/auth", authRouter);
+app.use("/task", taskRouter);
+
 
 app.listen(port, () => {
   console.log("server running on port:", port);
