@@ -8,6 +8,9 @@ const taskSchema = new mongoose.Schema({
   teamId:{
     type: mongoose.Schema.Types.ObjectId,
   },
+  employeeId:{
+    type: mongoose.Schema.Types.ObjectId,
+  }
 });
 
 const Task = mongoose.model("tasks", taskSchema);

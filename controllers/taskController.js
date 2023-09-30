@@ -5,11 +5,7 @@ const Team = require("../models/team.model");
 const addTask = async (req, res, next) => {
   try {
     const { task, teamId } = req.body;
-    const payload = {
-      task,
-      teamId,
-    };
-    console.log("payload:", payload);
+
     if (task && teamId) {
       let teamDoc = await Team.aggregate([
         {
@@ -18,8 +14,8 @@ const addTask = async (req, res, next) => {
           },
         },
         {
-          $addFields:{
-            convertedEmployeeIds:{
+          $addFields: {
+            convertedEmployeeIds: {
               $map: {
                 input: "$employeeIds",
                 as: "employeeId",
@@ -27,17 +23,17 @@ const addTask = async (req, res, next) => {
                   $toObjectId: "$$employeeId",
                 },
               },
-            }
-          }
+            },
+          },
         },
         {
-          $lookup:{
-            from:'employees',
-            localField:'convertedEmployeeIds',
-            foreignField:'_id',
-            as:'employees'
-          }
-        }
+          $lookup: {
+            from: "employees",
+            localField: "convertedEmployeeIds",
+            foreignField: "_id",
+            as: "employees",
+          },
+        },
       ]);
       teamDoc = teamDoc[0];
       // console.log("teamDoc:", teamDoc);
@@ -76,16 +72,26 @@ const addTask = async (req, res, next) => {
         );
       }
       if (updatedTeamDoc) {
-        // const taskDoc = await Task.create(payload);
-        console.log('teamDoc.employees:',teamDoc.employees);
-        console.log('updatedTeamDoc.taskGivenToEmployeeIndex:',updatedTeamDoc.taskGivenToEmployeeIndex);
-        const assignedToEmployee = teamDoc.employees[updatedTeamDoc.taskGivenToEmployeeIndex]
-        console.log('assignedToEmployee:',assignedToEmployee);
-        
+        console.log("teamDoc.employees:", teamDoc.employees);
+        console.log(
+          "updatedTeamDoc.taskGivenToEmployeeIndex:",
+          updatedTeamDoc.taskGivenToEmployeeIndex
+        );
+        const assignedToEmployee =
+          teamDoc.employees[updatedTeamDoc.taskGivenToEmployeeIndex];
+        console.log("assignedToEmployee:", assignedToEmployee);
+
+        const payload = {
+          task,
+          teamId,
+          employeeId: assignedToEmployee._id,
+        };
+        await Task.create(payload);
+
         return res.status(201).send({
-          message: "Task assigned successfully.",
+          message: "Task created successfully.",
           assign: updatedTeamDoc,
-          assignedToEmployee
+          assignedToEmployee,
         });
       }
     } else {
