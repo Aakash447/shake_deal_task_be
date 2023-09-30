@@ -1,12 +1,30 @@
 const mongoose = require("mongoose");
+// [
+//   {
+//     name:'MERN',
+//     employeesIds:[]
+//   },
+//   {
+//     name:'PHP',
+//     employeesIds:[]
+//   },
+//   {
+//     name:'IOS',
+//     employeesIds:[]
+//   }
+// ]
 
 const teamSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
-  employeesIds:{
+  employeeIds:{
     type: Array,
+  },
+  taskGivenToEmployeeIndex:{
+    type:Number,
+    default:-1
   }
 });
 

@@ -1,10 +1,12 @@
 const express = require("express");
 const {
-  register,
-} = require("../controllers/authController");
+  addTask, getTeams,
+} = require("../controllers/taskController");
 const taskRouter = express.Router();
 
-taskRouter.post("/", register);
+taskRouter.get("/teams", getTeams);
+taskRouter.post("/addTask", addTask);
+
 
 
 module.exports = taskRouter;

@@ -1,11 +1,12 @@
 const express = require("express");
-const authRouter = require("./routes/authRouter");
 
 const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
+const taskRouter = require("./routes/taskRouter");
 const app = express();
 const port = 8000;
+app.use(express.json());
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 let corsOptions = {
@@ -15,8 +16,8 @@ app.use(cors(corsOptions))
 
 
 
-app.use("/auth", authRouter);
 app.use("/task", taskRouter);
+
 
 
 app.listen(port, () => {
